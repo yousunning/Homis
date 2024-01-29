@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator</title>
+  <style>
+    input {
+      width: 200px;
+      padding: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>간단한 계산기</h2>
+  <input type="text" id="display" readonly> <!-- 읽기 전용 -->
+  <div>
+    <button onclick="appendNumber('1')">1</button>
+    <button onclick="appendNumber('2')">2</button>
+    <button onclick="appendNumber('3')">3</button>
+    <button onclick="setOperator('+')">+</button>
+  </div>
+  <div>
+    <button onclick="appendNumber('4')">4</button>
+    <button onclick="appendNumber('5')">5</button>
+    <button onclick="appendNumber('6')">6</button>
+    <button onclick="setOperator('-')">-</button>
+  </div>
+  <div>
+    <button onclick="appendNumber('7')">7</button>
+    <button onclick="appendNumber('8')">8</button>
+    <button onclick="appendNumber('9')">9</button>
+    <button onclick="setOperator('*')">*</button>
+  </div>
+  <div>
+    <button onclick="appendNumber('0')">0</button>
+    <button onclick="setOperator('/')">/</button>
+    <button onclick="setOperator('**')">^</button>
+    <button onclick="calculateResult()">=</button>
+    <button onclick="clearDisplay()">C</button>
+  </div>
+  <script>
+    let display = document.getElementById('display');
+    let currentInput = '';
+    let currentOperator = null;
+    let waitingForNextNumber = false;
+
+    function appendNumber(number) {
+      if (waitingForNextNumber) {
+        display.value = number;
+        waitingForNextNumber = false;
+      } else {
+        display.value += number;
+      }
+    }
+    function setOperator(operator) {
+      if (currentOperator !== null) {
+        calculateResult();
+      }
+      currentOperator = operator;
+      currentInput = display.value;
+      waitingForNextNumber = true;
+    }
+    function calculateResult() {
+      if (currentOperator == null) {
+        return;
+      }
+      const secondNumber = display.value;
+      switch (currentOperator) {
+        case "+":
+          display.value = parseFloat(currentInput) + parseFloat(secondNumber);
+          break;
+        case "-":
+          display.value = parseFloat(currentInput) - parseFloat(secondNumber);
+          break;
+        case "*":
+          display.value = parseFloat(currentInput) * parseFloat(secondNumber);
+          break;
+        case "/":
+          display.value = parseFloat(currentInput) / parseFloat(secondNumber);
+          break;
+        case "**":
+          display.value = Math.pow(parseFloat(currentInput), parseFloat(secondNumber));
+          break;
+      }
+      currentOperator = null;
+    }
+    function clearDisplay() {
+      display.value = '';
+      currentInput = '';
+      currentOperator = null;
+      waitingForNextNumber = false;
+    }
+  </script>
+</body>
+
+</html>
